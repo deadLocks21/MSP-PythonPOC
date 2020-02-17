@@ -38,7 +38,7 @@ class DbClass:
     def existanceTable(self, table):
         try:
             with self.con.cursor() as cur:
-                cur.execute("SELECT * FROM {};".format(table))
+                cur.execute("SELECT * FROM {} LIMIT 0;".format(table))
             res = True
             txt = "existe."
         except:
@@ -46,5 +46,18 @@ class DbClass:
             txt = "n'existe pas."
 
         print("[DATABASE] La table {} {}".format(table, txt))
+
+        return res
+
+
+    def contenuTable(self, table):
+        try:
+            with self.con.cursor() as cur:
+                cur.execute("SELECT * FROM {};".format(table))
+            res = cur.fetchall()
+        except:
+            pass
+
+        print("[DATABASE] Récupération contenue table {}".format(table))
 
         return res
