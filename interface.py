@@ -37,17 +37,15 @@ class MainWindow:
         self.f_results = VerticalScrolledFrame(self.root)
         self.f_results.place(anchor="n", width=700, height=400, x=400, y=190)
 
-        buttons = []
-        for i in range(20):
-            buttons.append(ButtonElDB(self.f_results.interior, i).getBt())
-            buttons[-1].pack()
-
         self.dB.connect()
 
         self.root.mainloop()
 
     def b_affichage(self):
         exist = self.dB.existanceTable(self.nomTable.get())
+        self.f_results.destroy()
+        self.f_results = VerticalScrolledFrame(self.root)
+        self.f_results.place(anchor="n", width=700, height=400, x=400, y=190)
 
         if not exist:
             self.l_tableFausse.place(anchor='n', width=250, height=35, x=400, y=150)
@@ -55,20 +53,53 @@ class MainWindow:
         else:
             self.l_tableFausse.place_forget()
 
+            contenu = self.dB.contenuTable(self.nomTable.get())
+
+            buttons = []
+            for i in range(len(contenu)):
+                buttons.append(ButtonElDB(self.f_results.interior, contenu[i]).getBt())
+                buttons[-1].pack()
+
 
 class ButtonElDB:
     def __init__(self, root, t):
         self.root = root
+        self.t = t
 
-        self.bt = Button(self.root, text=t, command=self.fermer)
 
-        self.bt.pack()
+        self.bt = Button(self.root,text=self.textBt(),width=94, height=2, relief="flat", command=self.fermer)
+
+
 
     def fermer(self):
         self.bt.pack_forget()
 
     def getBt(self):
         return self.bt
+
+    def textBt(self):
+        t = self.t
+        keyName = []
+
+        for key in t.keys():
+            keyName.append(key)
+
+        nbCar = int( 94 / len(keyName) )
+
+        text = ""
+
+        for i in range(len(keyName)):
+            if nbCar - 4 < len(str(t[keyName[i]])):
+                chain = " {}.. ".format(str(t[keyName[i]]))
+            else:
+                chain = " " + str(t[keyName[i]])
+
+                while len(chain) <= nbCar:
+                    chain += " "
+
+            text += chain
+
+        return text
 
 
 class VerticalScrolledFrame(Frame):
