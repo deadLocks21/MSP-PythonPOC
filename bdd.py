@@ -16,7 +16,10 @@ class DbClass:
         self.host = "127.0.0.1"
         self.user = "root"
         self.mdp = "root"
-        self.con = None
+        # self.con = None
+
+    def getName(self):
+        return self.name
 
     def connect(self):
         try:
@@ -31,3 +34,17 @@ class DbClass:
 
         except:
             print('[DATABASE] Connection Error !!')
+
+    def existanceTable(self, table):
+        try:
+            with self.con.cursor() as cur:
+                cur.execute("SELECT * FROM {};".format(table))
+            res = True
+            txt = "existe."
+        except:
+            res = False
+            txt = "n'existe pas."
+
+        print("[DATABASE] La table {} {}".format(table, txt))
+
+        return res

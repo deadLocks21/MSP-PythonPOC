@@ -3,5 +3,8 @@
 
 from interface import *
 
+
+# maDB = DbClass()
+# maDB.connect()
 MainWindow()
 
