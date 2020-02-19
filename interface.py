@@ -63,11 +63,10 @@ class MainWindow:
 
 class ButtonElDB:
     def __init__(self, root, t):
-        self.root = root
+        self.r = root
         self.t = t
 
-
-        self.bt = Button(self.root,text=self.textBt(),width=94, height=2, relief="flat", command=self.fermer)
+        self.bt = Button(self.r,text=self.textBt(),width=94, height=2, relief="flat", command=self.affInfo)
 
 
 
@@ -79,10 +78,7 @@ class ButtonElDB:
 
     def textBt(self):
         t = self.t
-        keyName = []
-
-        for key in t.keys():
-            keyName.append(key)
+        keyName = self.getKeyName()
 
         nbCar = int( 94 / len(keyName) )
 
@@ -100,6 +96,37 @@ class ButtonElDB:
             text += chain
 
         return text
+
+    def getKeyName(self):
+        t = self.t
+        keyName = []
+
+        for key in t.keys():
+            keyName.append(key)
+
+        return keyName
+
+    def affInfo(self):
+        root = Tk()
+        root.title('Data')
+        root.geometry("600x400")
+
+        keyName = self.getKeyName()
+
+        champs = VerticalScrolledFrame(root)
+        champs.place(anchor="n", width=500, height=340, x=300, y=10)
+
+        add = Button(root, text="Ajouter")
+        add.place(anchor="n", width=100, height=35, x=150, y=355)
+
+        supprimer = Button(root, text="Supprimer")
+        supprimer.place(anchor="n", width=100, height=35, x=300, y=355)
+
+        modifier = Button(root, text="Modifier")
+        modifier.place(anchor="n", width=100, height=35, x=450, y=355)
+
+        root.mainloop()
+
 
 
 class VerticalScrolledFrame(Frame):
