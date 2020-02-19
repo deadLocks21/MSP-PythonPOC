@@ -107,6 +107,9 @@ class ButtonElDB:
         return keyName
 
     def affInfo(self):
+        def modifier():
+            print(c1.getValue())
+
         root = Tk()
         root.title('Data')
         root.geometry("600x400")
@@ -122,11 +125,52 @@ class ButtonElDB:
         supprimer = Button(root, text="Supprimer")
         supprimer.place(anchor="n", width=100, height=35, x=300, y=355)
 
-        modifier = Button(root, text="Modifier")
+        modifier = Button(root, text="Modifier", command=modifier)
         modifier.place(anchor="n", width=100, height=35, x=450, y=355)
+
+
+
+
+        # c1 =
+
+        for i in range(8):
+            CanvasDeChamp(champs, "test")
+
+
+
+
+        # buttons = []
+        # for i in range(len(contenu)):
+        #     buttons.append(ButtonElDB(self.f_results.interior, contenu[i]).getBt())
+        #     buttons[-1].pack()
+
+
 
         root.mainloop()
 
+
+
+class CanvasDeChamp:
+    def __init__(self, root, nom):
+        self.root = root
+
+        nom = self.modifNom(nom)
+
+        self.canvas = Canvas(self.root.interior)
+        Label(self.canvas, text=nom).grid(row=0, column=0)
+        Label(self.canvas, text=" ").grid(row=1, column=0)
+        self.champ = Entry(self.canvas)
+        self.champ.grid(row=0, column=1)
+
+        self.canvas.pack()
+
+
+    def modifNom(self, nom):
+        return "{} :".format(nom)
+
+
+    def getValue(self):
+        return self.champ.get()
 
 
 class VerticalScrolledFrame(Frame):
