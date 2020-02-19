@@ -20,6 +20,7 @@ class MainWindow:
         self.nomDb.set("Connection à la base de données {}".format(self.dB.getName()))
         self.nomTable = StringVar()
 
+
         # Interface graphique
         self.l_nomDB = Label(self.root, textvariable=self.nomDb)
         self.l_nomDB.place(anchor='n', width=800, height=50, x=400, y=10)
@@ -36,8 +37,6 @@ class MainWindow:
         # self.f_res = Frame(self.root, background="white", highlightbackground="black", bd=2)
         self.f_results = VerticalScrolledFrame(self.root)
         self.f_results.place(anchor="n", width=700, height=400, x=400, y=190)
-
-        self.dB.connect()
 
         self.root.mainloop()
 
@@ -57,18 +56,20 @@ class MainWindow:
 
             buttons = []
             for i in range(len(contenu)):
-                buttons.append(ButtonElDB(self.f_results.interior, contenu[i]).getBt())
+                buttons.append(ButtonElDB(self.f_results.interior, contenu[i], self.nomTable.get()).getBt())
                 buttons[-1].pack()
 
 
 class ButtonElDB:
-    def __init__(self, root, t):
+    def __init__(self, root, t, tableName):
         self.r = root
         self.t = t
+        self.tableName = tableName
 
         self.bt = Button(self.r,text=self.textBt(),width=94, height=2, relief="flat", command=self.affInfo)
 
-
+    def setTableName(self, name):
+        self.tableName = name
 
     def fermer(self):
         self.bt.pack_forget()
@@ -107,8 +108,134 @@ class ButtonElDB:
         return keyName
 
     def affInfo(self):
+        def add():
+            data = ""
+            listData = recupInfos()
+
+            for i in range(len(keyName)):
+                try:
+                    listData[i] = int(listData[i])
+                except ValueError:
+                    pass
+
+
+                if type(listData[i]) == str:
+                    laData = "'{}'".format(listData[i])
+                else:
+                    laData = listData[i]
+
+                data += "{}, ".format(laData)
+
+            data = data[:len(data)-2]
+
+            print(data)
+
+            dB = DbClass()
+            dB.ajoutLigne(self.tableName,data)
+
         def modifier():
-            print(c1.getValue())
+            data = ""
+            listData = recupInfos()
+
+            for i in range(len(keyName)):
+                if type(listData[i]) == str:
+                    laData = "'{}'".format(listData[i])
+                else:
+                    laData = listData[i]
+
+                data += "{} = {}, ".format(keyName[i], laData)
+
+            data = data[:len(data)-2]
+
+            print(data)
+
+            dB = DbClass()
+            dB.modifierLigne(self.tableName,data, "{} = {}".format(keyName[0], c1.getEntry()))
+
+        def supprimer():
+            dB = DbClass()
+
+            dB.supprimerLigne(self.tableName, "{} = {}".format(keyName[0], c1.getEntry()))
+            root.destroy()
+
+
+
+        def remplirCanvas():
+            t = self.t
+            lK = len(keyName)
+            print(lK)
+
+            try:
+                if lK >= 1:
+                    c1.setNom(keyName[0])
+                    c1.setData(t[keyName[0]])
+                    c1.aff()
+
+                if lK >= 2:
+                    c2.setNom(keyName[1])
+                    c2.setData(t[keyName[1]])
+                    c2.aff()
+
+                if lK >= 3:
+                    c3.setNom(keyName[2])
+                    c3.setData(t[keyName[2]])
+                    c3.aff()
+
+                if lK >= 4:
+                    c4.setNom(keyName[3])
+                    c4.setData(t[keyName[3]])
+                    c4.aff()
+
+                if lK >= 5:
+                    c5.setNom(keyName[4])
+                    c5.setData(t[keyName[4]])
+                    c5.aff()
+
+                if lK >= 6:
+                    c6.setNom(keyName[5])
+                    c6.setData(t[keyName[5]])
+                    c6.aff()
+
+                if lK >= 7:
+                    c7.setNom(keyName[6])
+                    c7.setData(t[keyName[6]])
+                    c7.aff()
+
+                if lK >= 8:
+                    c8.setNom(keyName[7])
+                    c8.setData(t[keyName[7]])
+                    c8.aff()
+            except IndexError:
+                pass
+
+        def recupInfos():
+            res = []
+
+            if lK >= 1:
+                res.append(c1.getEntry())
+
+            if lK >= 2:
+                res.append(c2.getEntry())
+
+            if lK >= 3:
+                res.append(c3.getEntry())
+
+            if lK >= 4:
+                res.append(c4.getEntry())
+
+            if lK >= 5:
+                res.append(c5.getEntry())
+
+            if lK >= 6:
+                res.append(c6.getEntry())
+
+            if lK >= 7:
+                res.append(c7.getEntry())
+
+            if lK >= 8:
+                res.append(c8.getEntry())
+
+            return res
 
         root = Tk()
         root.title('Data')
@@ -119,50 +246,60 @@ class ButtonElDB:
         champs = VerticalScrolledFrame(root)
         champs.place(anchor="n", width=500, height=340, x=300, y=10)
 
-        add = Button(root, text="Ajouter")
+        add = Button(root, text="Ajouter", command=add)
         add.place(anchor="n", width=100, height=35, x=150, y=355)
 
-        supprimer = Button(root, text="Supprimer")
+        supprimer = Button(root, text="Supprimer", command=supprimer)
         supprimer.place(anchor="n", width=100, height=35, x=300, y=355)
 
         modifier = Button(root, text="Modifier", command=modifier)
         modifier.place(anchor="n", width=100, height=35, x=450, y=355)
 
+        t = self.t
+        lK = len(keyName)
 
+        if lK >= 1:
+            c1 = CanvasDeChamp(champs)
 
+        if lK >= 2:
+            c2 = CanvasDeChamp(champs)
 
-        # c1 =
+        if lK >= 3:
+            c3 = CanvasDeChamp(champs)
 
-        for i in range(8):
-            CanvasDeChamp(champs, "test")
+        if lK >= 4:
+            c4 = CanvasDeChamp(champs)
 
+        if lK >= 5:
+            c5 = CanvasDeChamp(champs)
 
+        if lK >= 6:
+            c6 = CanvasDeChamp(champs)
 
+        if lK >= 7:
+            c7 = CanvasDeChamp(champs)
 
-        # buttons = []
-        # for i in range(len(contenu)):
-        #     buttons.append(ButtonElDB(self.f_results.interior, contenu[i]).getBt())
-        #     buttons[-1].pack()
+        if lK >= 8:
+            c8 = CanvasDeChamp(champs)
 
-
+        remplirCanvas()
 
         root.mainloop()
 
 
 
 class CanvasDeChamp:
-    def __init__(self, root, nom):
+    def __init__(self, root):
         self.root = root
 
-        nom = self.modifNom(nom)
+        self.data = StringVar()
 
-        self.canvas = Canvas(self.root.interior)
-        Label(self.canvas, text=nom).grid(row=0, column=0)
+        self.canvas = Canvas(self.root.interior, highlightthickness=0)
+        self.n = Label(self.canvas, text="self.nom.get")
+        self.n.grid(row=0, column=0)
         Label(self.canvas, text=" ").grid(row=1, column=0)
-        self.champ = Entry(self.canvas)
+        self.champ = Entry(self.canvas,textvariable=self.data, width=50, justify="center")
         self.champ.grid(row=0, column=1)
-
-        self.canvas.pack()
 
 
     def modifNom(self, nom):
@@ -170,6 +307,18 @@ class CanvasDeChamp:
 
 
     def getValue(self):
+        return self.champ.get()
+
+    def setNom(self, nom):
+        self.n.config(text=nom)
+
+    def setData(self, data):
+        self.champ.insert(0, data)
+
+    def aff(self):
+        self.canvas.pack()
+
+    def getEntry(self):
         return self.champ.get()
 
 
