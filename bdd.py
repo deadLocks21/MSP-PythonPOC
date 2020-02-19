@@ -33,7 +33,7 @@ class DbClass:
             print("[DATABASE] Connected")
 
         except:
-            print('[DATABASE] Connection Error !!')
+            self.connect()
 
     def existanceTable(self, table):
         try:
