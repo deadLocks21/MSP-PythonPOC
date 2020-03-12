@@ -68,7 +68,7 @@ class DbClass:
         except:
             pass
 
-        print("[DATABASE] Récupération contenue table {}".format(table))
+        print("[DATABASE] Récupération contenu table {}".format(table))
         self.deco()
 
         return res

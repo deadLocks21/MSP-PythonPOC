@@ -17,7 +17,7 @@ class MainWindow:
 
         # Variables
         self.nomDb = StringVar()
-        self.nomDb.set("Connection à la base de données {}".format(self.dB.getName()))
+        self.nomDb.set("Connexion à la base de données {}".format(self.dB.getName()))
         self.nomTable = StringVar()
 
 
@@ -28,7 +28,7 @@ class MainWindow:
         self.e_nomTable = Entry(self.root, textvariable=self.nomTable, background="white", justify="center")
         self.e_nomTable.place(anchor='center', width=600, height=35, x=400, y=85)
 
-        self.b_chercherTable = Button(self.root, text="Voir contenue de la table", command=self.b_affichage)
+        self.b_chercherTable = Button(self.root, text="Voir contenu de la table", command=self.b_affichage)
         self.b_chercherTable.place(anchor='n', width=250, height=35, x=400, y=110)
 
         self.l_tableFausse = Label(self.root, text="La table que tu m'as donné ne marche pas ...", fg='red')
